@@ -36,11 +36,11 @@ export const ConfigurationSchema = z.object({
   // Model Configuration
   summarizationModel: z.string().default('openai:gpt-4o-mini'),
   summarizationModelMaxTokens: z.number().default(8192),
-  researchModel: z.string().default('openai:gpt-4o'),
+  researchModel: z.string().default('openai:gpt-4o-mini'),
   researchModelMaxTokens: z.number().default(10000),
   compressionModel: z.string().default('openai:gpt-4o-mini'),
   compressionModelMaxTokens: z.number().default(8192),
-  finalReportModel: z.string().default('openai:gpt-4o'),
+  finalReportModel: z.string().default('openai:gpt-4o-mini'),
   finalReportModelMaxTokens: z.number().default(10000),
   
   // MCP Configuration
@@ -52,7 +52,6 @@ export const ConfigurationSchema = z.object({
   anthropicApiKey: z.string().optional(),
   googleApiKey: z.string().optional(),
   tavilyApiKey: z.string().optional(),
-  deepseekApiKey: z.string().optional()
 });
 
 export type Configuration = z.infer<typeof ConfigurationSchema>;
@@ -71,17 +70,16 @@ export class ConfigurationManager {
       maxReactToolCalls: Number(process.env.MAX_REACT_TOOL_CALLS) || 5,
       summarizationModel: process.env.SUMMARIZATION_MODEL || 'openai:gpt-4o-mini',
       summarizationModelMaxTokens: Number(process.env.SUMMARIZATION_MODEL_MAX_TOKENS) || 8192,
-      researchModel: process.env.RESEARCH_MODEL || 'openai:gpt-4o',
+      researchModel: process.env.RESEARCH_MODEL || 'openai:gpt-4o-mini',
       researchModelMaxTokens: Number(process.env.RESEARCH_MODEL_MAX_TOKENS) || 10000,
       compressionModel: process.env.COMPRESSION_MODEL || 'openai:gpt-4o-mini',
       compressionModelMaxTokens: Number(process.env.COMPRESSION_MODEL_MAX_TOKENS) || 8192,
-      finalReportModel: process.env.FINAL_REPORT_MODEL || 'openai:gpt-4o',
+      finalReportModel: process.env.FINAL_REPORT_MODEL || 'openai:gpt-4o-mini',
       finalReportModelMaxTokens: Number(process.env.FINAL_REPORT_MODEL_MAX_TOKENS) || 10000,
       openaiApiKey: process.env.OPENAI_API_KEY,
       anthropicApiKey: process.env.ANTHROPIC_API_KEY,
       googleApiKey: process.env.GOOGLE_API_KEY,
       tavilyApiKey: process.env.TAVILY_API_KEY,
-      deepseekApiKey: process.env.DEEPSEEK_API_KEY,
       mcpConfig: process.env.MCP_CONFIG ? JSON.parse(process.env.MCP_CONFIG) : undefined,
       mcpPrompt: process.env.MCP_PROMPT,
       ...configOverrides
@@ -107,8 +105,6 @@ export class ConfigurationManager {
       return this.config.anthropicApiKey;
     } else if (modelLower.startsWith('google:') || modelLower.startsWith('gemini:')) {
       return this.config.googleApiKey;
-    }else if (modelLower.startsWith('deepseek:')) {
-      return this.config.deepseekApiKey;
     }
     
     return undefined;

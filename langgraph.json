@@ -4,7 +4,7 @@
     "."
   ],
   "graphs": {
-    "agent": "./src/deepResearcher.ts:deepResearcher"
+    "deep_researcher_agent": "./src/deepResearcher.ts:deepResearcherAgent"
   },
   "env": ".env"
 }

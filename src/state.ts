@@ -9,9 +9,21 @@ export const ConductResearchSchema = z.object({
   )
 });
 
+export const ConductResearch = {
+  name: "ConductResearch",
+  description: "Call this tool to conduct research on a specific topic.",
+  schema: ConductResearchSchema
+}
+
 export const ResearchCompleteSchema = z.object({
   completed: z.boolean().describe('Whether the research is complete')
 });
+
+export const ResearchComplete = {
+  name: "ResearchComplete",
+  description: "Call this tool to indicate that the research is complete.",
+  schema: ResearchCompleteSchema
+}
 
 export const SummarySchema = z.object({
   summary: z.string(),
@@ -37,11 +49,11 @@ export const ResearchQuestionSchema = z.object({
 });
 
 // Custom reducer for overriding arrays and objects
-export function overrideReducer<T>(currentValue: T, newValue: T): T {
+export function overrideReducer<T>(currentValue: T[], newValue: T[]): T[] {
   if (typeof newValue === 'object' && newValue !== null && 'type' in newValue && (newValue as any).type === 'override') {
     return (newValue as any).value ?? newValue;
   }
-  return newValue;
+  return [...currentValue, ...newValue];
 }
 
 // Custom reducer for concatenating arrays
@@ -60,7 +72,14 @@ export const AgentStateAnnotation = Annotation.Root({
     default: () => []
   }),
   researchBrief: Annotation<string>,
-
+  rawNotes: Annotation<string[]>({
+    value: overrideReducer,
+    default: () => []
+  }),
+  notes: Annotation<string[]>({
+    value: overrideReducer,
+    default: () => []
+  }),
   finalReport: Annotation<string>
 })
 
@@ -75,16 +94,38 @@ export const SupervisorStateAnnotation = Annotation.Root({
     value: concatReducer,
     default: () => []
   }),
-  researchIterations: Annotation<number>({
-    value: overrideReducer,
-    default: () => 0
-  }),
+  researchIterations: Annotation<number>,
   rawNotes: Annotation<string[]>({
     value: concatReducer,
     default: () => []
   })
 });
 
+const rawNotes = Annotation<string[]>({
+  value: concatReducer,
+  default: () => []
+})
+
+// Researcher state annotation
+export const ResearcherStateAnnotation = Annotation.Root({
+  researcherMessages: Annotation<BaseMessage[]>({
+    value: concatReducer,
+    default: () => []
+  }),
+  toolCallIterations: Annotation<number>,
+  researchTopic: Annotation<string>,
+  compressedResearch: Annotation<string>,
+  rawNotes
+});
+
+// Researcher output state annotation
+export const ResearcherOutputStateAnnotation = Annotation.Root({
+  compressedResearch: Annotation<string>,
+  rawNotes
+});
+
 // Export type aliases for easier use
 export type AgentState = typeof AgentStateAnnotation.State;
 export type SupervisorState = typeof SupervisorStateAnnotation.State;
+export type ResearcherState = typeof ResearcherStateAnnotation.State;
+export type ResearcherOutputState = typeof ResearcherOutputStateAnnotation.State;

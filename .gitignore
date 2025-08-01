@@ -161,3 +161,6 @@ temp/
 
 # LangGraph specific
 .langgraph/
+
+# LangGraph API
+.langgraph_api
