@@ -3,12 +3,11 @@ import { z } from 'zod';
 import { BaseMessage, ToolMessage, AIMessage, filterMessages } from '@langchain/core/messages';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatAnthropic } from '@langchain/anthropic';
-import { ChatDeepSeek } from '@langchain/deepseek';
 import { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import { DynamicStructuredTool } from '@langchain/core/tools';
 import { Configuration, SearchAPI } from './config.js';
-import { Summary, SummarySchema, ResearchComplete, ResearchCompleteSchema } from './state.ts';
-import { summarizeWebpagePrompt } from './prompts.ts';
+import { ResearchCompleteSchema } from './state.js';
+import { summarizeWebpagePrompt } from './prompts.js';
 
 // Date utility function
 export function getTodayStr(): string {

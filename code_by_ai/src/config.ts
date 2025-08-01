@@ -1,8 +1,8 @@
 import { z } from 'zod';
-// import { config } from 'dotenv';
+import { config } from 'dotenv';
 
 // Load environment variables
-// config();
+config();
 
 // Enum for search API types
 export enum SearchAPI {

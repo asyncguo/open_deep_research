@@ -1,0 +1,13 @@
+{
+  "dockerfile_lines": [],
+  "graphs": {
+    "open_deep_research_js": "./src/index.ts:deepResearcher"
+  },
+  "node_version": "20",
+  "env": "./.env",
+  "dependencies": [
+    "."
+  ],
+  "runtime": "node",
+  "package_manager": "pnpm"
+} 

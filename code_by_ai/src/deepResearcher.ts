@@ -81,7 +81,6 @@ async function clarifyWithUser(state: AgentState): Promise<Partial<AgentState>> 
   const config = configManager.getConfig();
   
   if (!config.allowClarification) {
-    // Command(goto="write_research_brief")
     return {};
   }
 
@@ -99,9 +98,6 @@ async function clarifyWithUser(state: AgentState): Promise<Partial<AgentState>> 
       .replace('{date}', getTodayStr());
 
     const response = await model.invoke([new HumanMessage(prompt)], modelConfig);
-
-    console.log('clarifyWithUser response==========',response);
-    
     
     // This would need proper structured output parsing
     // For now, returning simple response
@@ -481,7 +477,6 @@ const deepResearcherBuilder = new StateGraph(AgentStateAnnotation)
   .addNode('research_supervisor', supervisorBuilder.compile() as any)
   .addNode('final_report_generation', finalReportGeneration)
   .addEdge(START, 'clarify_with_user')
-  .addEdge('clarify_with_user', END)
   .addConditionalEdges('clarify_with_user', (state: AgentState) => {
     // Check if clarification was needed
     const messages = state.messages || [];
